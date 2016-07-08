@@ -30,7 +30,7 @@ public class MapSpawn : MonoBehaviour {
     {
         foreach (Vector3 point in fullPath)
         {
-            Instantiate(roadTile, point, Quaternion.identity);
+            Instantiate(roadTile, point, Quaternion.Euler(90,0,0));
         }
     }
 
@@ -44,7 +44,7 @@ public class MapSpawn : MonoBehaviour {
         path.Add(new Vector3(currentXPos, 0, currentYPos));
         while (currentXPos < xSize)
         {
-            int direction = Random.Range(0, 4);
+            int direction = Random.Range(0, 3);
             int newXPos = currentXPos;
             int newYPos = currentYPos;
             switch (direction)
@@ -54,24 +54,28 @@ public class MapSpawn : MonoBehaviour {
                     {
                         newYPos += 1;                                                
                     }
+                    else { continue; }
                     break;
                 case 1:
                     if (currentXPos < xSize && !path.Exists(x => x.x == currentXPos+1 && x.z == currentYPos))
                     {
                         newXPos += 1;
                     }
+                    else { continue; }
                     break;
                 case 2:
                     if (currentYPos > 0 && !path.Exists(x=>x.x == currentXPos && x.z == currentYPos - 1))
                     {
                         newYPos -= 1;
                     }
+                    else { continue; }
                     break;
                 case 3:
                     if (currentXPos > 0 && !path.Exists(x => x.x == currentXPos - 1 && x.z == currentYPos))
                     {
                         newXPos -= 1;
                     }
+                    else {continue;}
                     break;
                 default:
                     break;
@@ -89,11 +93,11 @@ public class MapSpawn : MonoBehaviour {
     }
     private bool checkBorders(List<Vector3> path, int newX, int newY)
     {
-        if (path.Where(x => (x.x == newX && x.z == newY + 1)
-            || (x.x == newX + 1 && x.z == newY)
-            || (x.x == newX && x.z == newY - 1)
-            || (x.x == newX - 1 && x.z == newY))
-            .Count() > 1)
+        if ((path.Where(x => (x.x == newX && x.z == newY + 1)
+                || (x.x == newX + 1 && x.z == newY)
+                || (x.x == newX && x.z == newY - 1)
+                || (x.x == newX - 1 && x.z == newY))
+            .Count() > 1))
             return false;
         return true;
     }
