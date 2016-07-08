@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class MapSpawn : MonoBehaviour {
 
@@ -9,28 +10,37 @@ public class MapSpawn : MonoBehaviour {
     public List<Vector3> fullPath;
 
     public int seed;
+    public bool randomSeed;
     public int xSize;
     public int ySize;
     public GameObject roadTile;
+    public GameObject tilesParent;
     private Camera gameCam;
 
 	// Use this for initialization
 	void Start () {
+
+        if (randomSeed)
+            seed = UnityEngine.Random.seed = new System.Random().Next(int.MaxValue);
+
         gameCam = Camera.main;
         fullPath = GenerateRoad();
         InstaintiateRoad();
+
+        CentreCamera();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+    private void CentreCamera()
+    {
+        gameCam.transform.position = new Vector3(xSize / 2, gameCam.transform.position.y, ySize / 2);
+    }
 
     private void InstaintiateRoad()
     {
         foreach (Vector3 point in fullPath)
         {
-            Instantiate(roadTile, point, Quaternion.Euler(90,0,0));
+            GameObject currentTile = (GameObject)Instantiate(roadTile, point, Quaternion.Euler(90,0,0));
+            currentTile.transform.parent = tilesParent.transform;
         }
     }
 
@@ -39,12 +49,12 @@ public class MapSpawn : MonoBehaviour {
         List<Vector3> path = new List<Vector3>();
         int currentXPos = 0;
         int currentYPos = 0;
-        Random.seed = seed;
-        currentYPos = Random.Range(0, ySize);
+        UnityEngine.Random.seed = seed;
+        currentYPos = UnityEngine.Random.Range(0, ySize);
         path.Add(new Vector3(currentXPos, 0, currentYPos));
         while (currentXPos < xSize)
         {
-            int direction = Random.Range(0, 3);
+            int direction = UnityEngine.Random.Range(0, 3);
             int newXPos = currentXPos;
             int newYPos = currentYPos;
             switch (direction)
