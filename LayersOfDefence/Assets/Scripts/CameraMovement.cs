@@ -18,10 +18,10 @@ public class CameraMovement : MonoBehaviour {
 
 	void Update ()
     {
-        bool isTop = Input.mousePosition.y >= Screen.height - 1;
-        bool isBottom = Input.mousePosition.y <= 0;
-        bool isRight = Input.mousePosition.x >= Screen.width - 1;
-        bool isLeft = Input.mousePosition.x <= 0;
+        bool isTop = Input.mousePosition.y >= Screen.height - 1 || Input.GetAxis("Vertical") > 0f;
+        bool isBottom = Input.mousePosition.y <= 0 || Input.GetAxis("Vertical") < 0f;
+        bool isRight = Input.mousePosition.x >= Screen.width - 1 || Input.GetAxis("Horizontal") > 0f;
+        bool isLeft = Input.mousePosition.x <= 0 || Input.GetAxis("Horizontal") < 0f;
 
         PanVertical(isTop, isBottom);
         PanHorizontal(isLeft, isRight);
