@@ -11,7 +11,7 @@ public class Nav : MonoBehaviour {
 
     Rigidbody playerRB;
     int currentPoint, lastPoint;
-    float speed = 5f;
+    public float speed = 5f;
 
     bool isMoving = false;
 

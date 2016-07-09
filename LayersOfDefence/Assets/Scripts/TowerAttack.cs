@@ -8,6 +8,8 @@ public class TowerAttack : MonoBehaviour {
     public int Range;
     public int Damage;
     public int AttackSpeed;
+    public GameObject Bullet;
+    public float spawnDistance = 1.2f;
 
     private GameObject self;  
     private SphereCollider attackCollider;
@@ -15,12 +17,13 @@ public class TowerAttack : MonoBehaviour {
     private Queue<GameObject> lockQueue;
     private float nextFire;
     private bool towerIsShooting;
+    
 
 	// Use this for initialization
 	void Start () {
-        self = this.gameObject;                        
+        self = this.gameObject;
         attackCollider = GetComponent<SphereCollider>();
-        attackCollider.radius = 1 * Range;
+        attackCollider.radius = Mathf.RoundToInt(Range/2)+1;
         lockQueue = new Queue<GameObject>();        
     }
 	
@@ -32,13 +35,24 @@ public class TowerAttack : MonoBehaviour {
             if (Time.time >= nextFire)
             {
                 Shoot();
-                nextFire = Time.time + 1 / AttackSpeed;
+                nextFire = Time.time + 1 - AttackSpeed*0.01f*3;
+            }
+        }
+        else
+        {
+            if (lockQueue.Count > 0)
+            {
+                lockedEnemy = lockQueue.Dequeue();
             }
         }
 	}
 
     void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.tag != "Enemy")
+        {
+            return;
+        }
         if (lockedEnemy == null)
         {            
             lockedEnemy = other.gameObject;
@@ -65,18 +79,27 @@ public class TowerAttack : MonoBehaviour {
         }
         else
         {
-            lockQueue = (Queue<GameObject>)lockQueue.Where(p => p != other.gameObject);
+            lockQueue = new Queue<GameObject>(lockQueue.Where(p => p != other.gameObject));
         }    
     }
 
     void RotateToEnemy()
     {
         //rotate tower turret towards enemy if neccesary
+        self.transform.LookAt(lockedEnemy.transform);
     }
 
     void Shoot()
     {
         //know where to shoot
         //spawn projectile/raycast/whatever and make it go to enenmy
+        Debug.Log("Shooty shooty");
+        self.transform.LookAt(lockedEnemy.transform);
+        GameObject bullet = (GameObject)Instantiate(Bullet, self.transform.position + spawnDistance*self.transform.forward, self.transform.rotation);
+        bullet.transform.Rotate(0, 0, 90f);
+        moveForward mover = bullet.GetComponent<moveForward>();
+        mover.damage = Damage;
+        mover.speed = 20f;
+        mover.target = lockedEnemy.transform.position;
     }
 }
