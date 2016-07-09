@@ -171,4 +171,11 @@ public class TowerStats : MonoBehaviour
             Towers.towers[towerIndex - 1] = (TowerStats)MemberwiseClone();
         }
     }
+    
+    internal void UpdateMesh(GameObject top, GameObject middle, GameObject bottom)
+    {
+        top.GetComponent<MeshFilter>().mesh = Top;
+        middle.GetComponent<MeshFilter>().mesh = Middle;
+        bottom.GetComponent<MeshFilter>().mesh = Bottom;
+    }
 }

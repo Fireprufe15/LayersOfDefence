@@ -22,35 +22,48 @@ public class TowerPlacement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        mask = LayerMask.GetMask("Floor");        
+        mask = LayerMask.GetMask("Floor");    
+    }
+
+    void OnEnable()
+    {
         spawnGhost = (GameObject)Instantiate(towerToSpawn, new Vector3(0, 0, 0), Quaternion.identity);
         spawnGhost.GetComponent<SphereCollider>().enabled = false;
         spawnGhost.GetComponent<BoxCollider>().enabled = true;
-        spawnGhost.GetComponent<BoxCollider>().isTrigger = true;   
-        spawnGhost.tag = "Ghost";     
+        spawnGhost.GetComponent<BoxCollider>().isTrigger = true;
+        spawnGhost.tag = "Ghost";
+     }
 
-    }
-	
-	// Update is called once per frame
-	void Update ()
-    {      
+    // Update is called once per frame
+    void Update ()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            Destroy(spawnGhost);
+
+            enabled = false;
+            return;
+        }
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);        
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, rayLength, mask))
         {
             placePosition = hit.point;
-            spawnGhost.transform.position = new Vector3(placePosition.x, 0.5f, placePosition.z);
+            placePosition = new Vector3(Mathf.Round(placePosition.x), placePosition.y, Mathf.Round(placePosition.z));
+            
+            spawnGhost.transform.position = new Vector3(placePosition.x, 0.01f, placePosition.z);
             Debug.DrawLine(Camera.main.transform.position, placePosition);
             List<Ray> cornerChecks = new List<Ray>();
             cornerChecks.Add(new Ray(spawnGhost.transform.position, Vector3.down));
-            cornerChecks.Add(new Ray(new Vector3(spawnGhost.transform.position.x + (spawnGhost.transform.localScale.x / 2)*0.98f,
-                spawnGhost.transform.position.y, spawnGhost.transform.position.z + (spawnGhost.transform.localScale.z / 2)*0.98f), Vector3.down));            
-            cornerChecks.Add(new Ray(new Vector3(spawnGhost.transform.position.x + (spawnGhost.transform.localScale.x / 2)*0.98f,
-                spawnGhost.transform.position.y, spawnGhost.transform.position.z - (spawnGhost.transform.localScale.z / 2)*0.98f), Vector3.down));
-            cornerChecks.Add(new Ray(new Vector3(spawnGhost.transform.position.x - (spawnGhost.transform.localScale.x / 2)*0.98f,
-                spawnGhost.transform.position.y, spawnGhost.transform.position.z - (spawnGhost.transform.localScale.z / 2)*0.98f), Vector3.down));
-            cornerChecks.Add(new Ray(new Vector3(spawnGhost.transform.position.x - (spawnGhost.transform.localScale.x / 2)*0.98f,
-                spawnGhost.transform.position.y, spawnGhost.transform.position.z + (spawnGhost.transform.localScale.z / 2)*0.98f), Vector3.down));
+            cornerChecks.Add(new Ray(new Vector3(spawnGhost.transform.position.x + (spawnGhost.transform.localScale.x*2 / 2)*0.99f,
+                spawnGhost.transform.position.y, spawnGhost.transform.position.z + (spawnGhost.transform.localScale.z*2 / 2)*0.99f), Vector3.down));            
+            cornerChecks.Add(new Ray(new Vector3(spawnGhost.transform.position.x + (spawnGhost.transform.localScale.x*2 / 2)*0.99f,
+                spawnGhost.transform.position.y, spawnGhost.transform.position.z - (spawnGhost.transform.localScale.z*2 / 2)*0.99f), Vector3.down));
+            cornerChecks.Add(new Ray(new Vector3(spawnGhost.transform.position.x - (spawnGhost.transform.localScale.x*2 / 2)*0.99f,
+                spawnGhost.transform.position.y, spawnGhost.transform.position.z - (spawnGhost.transform.localScale.z*2 / 2)*0.99f), Vector3.down));
+            cornerChecks.Add(new Ray(new Vector3(spawnGhost.transform.position.x - (spawnGhost.transform.localScale.x*2 / 2)*0.99f,
+                spawnGhost.transform.position.y, spawnGhost.transform.position.z + (spawnGhost.transform.localScale.z*2 / 2)*0.99f), Vector3.down));
             canPlace = true;
 
             
@@ -74,11 +87,17 @@ public class TowerPlacement : MonoBehaviour {
         }
         if (canPlace == true)
         {
-            spawnGhost.GetComponent<Renderer>().material = greenMaterial;
+            for (int i = 0 ; i < 3; i++)
+            {
+                spawnGhost.transform.GetChild(i).gameObject.GetComponent<Renderer>().material = greenMaterial;
+            }
         }
         else
         {
-            spawnGhost.GetComponent<Renderer>().material = redMaterial;
+            for (int i = 0; i < 3; i++)
+            {
+                spawnGhost.transform.GetChild(i).gameObject.GetComponent<Renderer>().material = redMaterial;
+            }
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -90,7 +109,5 @@ public class TowerPlacement : MonoBehaviour {
                 spawnedTowers.Add(spawnedTower);
             }
         }
-
-        
 	}    
 }

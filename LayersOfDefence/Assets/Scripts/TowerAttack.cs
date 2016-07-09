@@ -26,8 +26,8 @@ public class TowerAttack : MonoBehaviour
     void Start()
     {
         self = this.gameObject;
-        attackCollider = GetComponent<SphereCollider>();
-        attackCollider.radius = Mathf.RoundToInt(Range / 2) + 1;
+        attackCollider = self.gameObject.GetComponent<SphereCollider>();
+        attackCollider.radius += Range * 0.01f;
         lockQueue = new Queue<GameObject>();
         towerPlacer = GameObject.Find("TowerBuilder");
     }
@@ -51,6 +51,9 @@ public class TowerAttack : MonoBehaviour
                 lockedEnemy = lockQueue.Dequeue();
             }
         }
+
+
+        transform.rotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, 0);
     }
 
     void OnTriggerEnter(Collider other)
