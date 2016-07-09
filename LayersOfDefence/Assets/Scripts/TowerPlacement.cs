@@ -31,7 +31,7 @@ public class TowerPlacement : MonoBehaviour {
         spawnGhost.GetComponent<SphereCollider>().enabled = false;
         spawnGhost.GetComponent<BoxCollider>().enabled = true;
         spawnGhost.GetComponent<BoxCollider>().isTrigger = true;
-        spawnGhost.tag = "Ghost";
+        spawnGhost.tag = "Ghost";        
      }
 
     // Update is called once per frame
@@ -55,31 +55,23 @@ public class TowerPlacement : MonoBehaviour {
             spawnGhost.transform.position = new Vector3(placePosition.x, 0.01f, placePosition.z);
             Debug.DrawLine(Camera.main.transform.position, placePosition);
             List<Ray> cornerChecks = new List<Ray>();
-            cornerChecks.Add(new Ray(spawnGhost.transform.position, Vector3.down));
-            cornerChecks.Add(new Ray(new Vector3(spawnGhost.transform.position.x + (spawnGhost.transform.localScale.x*2 / 2)*0.99f,
-                spawnGhost.transform.position.y, spawnGhost.transform.position.z + (spawnGhost.transform.localScale.z*2 / 2)*0.99f), Vector3.down));            
-            cornerChecks.Add(new Ray(new Vector3(spawnGhost.transform.position.x + (spawnGhost.transform.localScale.x*2 / 2)*0.99f,
-                spawnGhost.transform.position.y, spawnGhost.transform.position.z - (spawnGhost.transform.localScale.z*2 / 2)*0.99f), Vector3.down));
-            cornerChecks.Add(new Ray(new Vector3(spawnGhost.transform.position.x - (spawnGhost.transform.localScale.x*2 / 2)*0.99f,
-                spawnGhost.transform.position.y, spawnGhost.transform.position.z - (spawnGhost.transform.localScale.z*2 / 2)*0.99f), Vector3.down));
-            cornerChecks.Add(new Ray(new Vector3(spawnGhost.transform.position.x - (spawnGhost.transform.localScale.x*2 / 2)*0.99f,
-                spawnGhost.transform.position.y, spawnGhost.transform.position.z + (spawnGhost.transform.localScale.z*2 / 2)*0.99f), Vector3.down));
+            Ray r = new Ray(spawnGhost.transform.position, Vector3.down);
+            RaycastHit rh;
             canPlace = true;
-
-            
-            foreach (Ray r in cornerChecks)
+            if (Physics.Raycast(r, out rh, rayLength))
             {
-                RaycastHit hitInfo;
-                if (Physics.Raycast(r, out hitInfo, rayLength))
+                Debug.DrawLine(r.origin, placePosition);
+                if (rh.collider.tag == "Tile" || rh.collider.tag == "Enemy" || rh.collider.tag == "Tower")
                 {
-                    Debug.DrawLine(r.origin,hitInfo.point);
-                    if (hitInfo.collider.gameObject.tag == "Tile" || hitInfo.collider.gameObject.tag == "Enemy")
-                    {   
-                        canPlace = false;
-                        break;                      
-                    }
+                    canPlace = false;
                 }
             }
+            if (spawnedTowers.Where(p => p.transform.position == spawnGhost.transform.position).Count() > 0)
+            {
+                canPlace = false;
+            }
+            
+            
         }
         if (onOtherTower == true)
         {
@@ -105,7 +97,8 @@ public class TowerPlacement : MonoBehaviour {
             if (canPlace)
             {
                 GameObject spawnedTower = (GameObject)Instantiate(towerToSpawn, spawnGhost.transform.position, spawnGhost.transform.rotation);
-                spawnedTower.tag = "Tower";               
+                spawnedTower.tag = "Tower";
+                spawnedTower.transform.FindChild("Bottom").tag = "Tower";             
                 spawnedTowers.Add(spawnedTower);
             }
         }

@@ -18,7 +18,7 @@ public class TowerAttack : MonoBehaviour
     private Queue<GameObject> lockQueue;
     private float nextFire;
     private bool towerIsShooting;
-    private GameObject towerPlacer;
+    public GameObject towerPlacer;
 
 
 
@@ -28,8 +28,7 @@ public class TowerAttack : MonoBehaviour
         self = this.gameObject;
         attackCollider = self.gameObject.GetComponent<SphereCollider>();
         attackCollider.radius += Range * 0.01f;
-        lockQueue = new Queue<GameObject>();
-        towerPlacer = GameObject.Find("TowerBuilder");
+        lockQueue = new Queue<GameObject>();        
     }
 
     // Update is called once per frame
@@ -58,12 +57,9 @@ public class TowerAttack : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (tag == "Ghost")
+        
+        if (gameObject.transform.parent.gameObject.tag == "Ghost")
         {
-            if (other.gameObject.tag == "Tower")
-            {
-                towerPlacer.GetComponent<TowerPlacement>().onOtherTower = true;
-            }
             
             return;
         }
@@ -88,12 +84,10 @@ public class TowerAttack : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {        
-        if (tag == "Ghost")
-        {
-            if (other.gameObject.tag == "Tower")
-            {
-                towerPlacer.GetComponent<TowerPlacement>().onOtherTower = false;
-            }
+
+        if (gameObject.transform.parent.gameObject.tag == "Ghost")
+        {            
+            
 
             return;
         }
