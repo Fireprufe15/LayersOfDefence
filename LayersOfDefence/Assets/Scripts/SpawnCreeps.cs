@@ -50,7 +50,6 @@ public class SpawnCreeps : MonoBehaviour {
                 ps.CreepsOnMap++;
                 DamageController dmg = spawnedCreep.GetComponent<DamageController>();
                 dmg.health = 10f * wave + 1;
-                dmg.health = 20f;
                 dmg.textObject = indicatorText;
                 Nav n = spawnedCreep.GetComponent<Nav>();
                 n.points = mapSpawn.fullPath;
