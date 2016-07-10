@@ -5,6 +5,7 @@ using System;
 
 public class SpawnCreeps : MonoBehaviour {
 
+    public GameObject[] creepTypes;
     public int creepsPerWave;
     public float timeBetweenCreeps;
     public float timeBetweenWaves;
@@ -40,6 +41,8 @@ public class SpawnCreeps : MonoBehaviour {
         SpawnWave();
     }
 
+    int creepTypeToSpawnIndex = 0;
+
     private void SpawnWave()
     {
         if (Time.timeSinceLevelLoad >= nextWaveSpawn)
@@ -48,7 +51,7 @@ public class SpawnCreeps : MonoBehaviour {
             {
                 waveText.enabled = false;
                 // Spawn creep
-                GameObject spawnedCreep = (GameObject)Instantiate(creep, StartingTile, Quaternion.identity);
+                GameObject spawnedCreep = (GameObject)Instantiate(creepTypes[creepTypeToSpawnIndex], StartingTile, Quaternion.identity);
                 ps.CreepsOnMap++;
                 DamageController dmg = spawnedCreep.GetComponent<DamageController>();
                 dmg.health = 10f * (wave + 1);
@@ -65,6 +68,9 @@ public class SpawnCreeps : MonoBehaviour {
                     creepCount = 0;
                     nextWaveSpawn = Time.timeSinceLevelLoad + timeBetweenWaves;
                     wave++;
+
+                    creepTypeToSpawnIndex = UnityEngine.Random.Range(0, creepTypes.Length);
+
                     ps.Wave = wave;
                     ps.Gold += wave * goldPerWaveMultiplier + towerAfterWaveGold;
                 }
