@@ -9,6 +9,7 @@ public class TowerPlacement : MonoBehaviour {
     public Material redMaterial;
     [HideInInspector]
     public List<GameObject> spawnedTowers;
+    
 
     float rayLength = 300f;
     LayerMask mask;
@@ -22,6 +23,7 @@ public class TowerPlacement : MonoBehaviour {
     private bool canPlace;
     [HideInInspector]
     public bool onOtherTower;
+    public SpawnCreeps spawnCreeps;
 
 	// Use this for initialization
 	void Start () {
@@ -113,6 +115,11 @@ public class TowerPlacement : MonoBehaviour {
                 topStats.Range = ts.range;
                 topStats.AttackSpeed = ts.attackSpeed;
                 topStats.ts = ts;
+
+                if (ts.abilities.MoreGoldPerWave)
+                {
+                    spawnCreeps.towerAfterWaveGold += 20;
+                }
             }
         }
 	}    

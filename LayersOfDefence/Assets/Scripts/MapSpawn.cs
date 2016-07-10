@@ -49,6 +49,7 @@ public class MapSpawn : MonoBehaviour {
             }
         }
 
+        Camera.main.transform.position = new Vector3(fullPath[0].x, fullPath[0].y + 8, fullPath[0].z - 5);
     }
 
     private List<Vector3> GenerateRoad()

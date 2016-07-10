@@ -14,6 +14,8 @@ public class SpawnCreeps : MonoBehaviour {
     public float initialWait;
     public Text waveText;
     public PlayerStats ps;
+    public int goldPerWaveMultiplier;
+    [HideInInspector] public int towerAfterWaveGold = 0;
 
     [HideInInspector]
     public int wave;
@@ -49,7 +51,7 @@ public class SpawnCreeps : MonoBehaviour {
                 GameObject spawnedCreep = (GameObject)Instantiate(creep, StartingTile, Quaternion.identity);
                 ps.CreepsOnMap++;
                 DamageController dmg = spawnedCreep.GetComponent<DamageController>();
-                dmg.health = 10f * wave + 1;
+                dmg.health = 1000f * (wave + 1);
                 dmg.textObject = indicatorText;
                 Nav n = spawnedCreep.GetComponent<Nav>();
                 n.points = mapSpawn.fullPath;
@@ -64,6 +66,7 @@ public class SpawnCreeps : MonoBehaviour {
                     nextWaveSpawn = Time.timeSinceLevelLoad + timeBetweenWaves;
                     wave++;
                     ps.Wave = wave;
+                    ps.Gold += wave * goldPerWaveMultiplier + towerAfterWaveGold;
                 }
             }
         }
