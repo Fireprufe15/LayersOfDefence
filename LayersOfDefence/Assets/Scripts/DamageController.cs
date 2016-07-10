@@ -3,8 +3,15 @@ using System.Collections;
 
 public class DamageController : MonoBehaviour {
 
-    public int health;
+    public float health;
     public int slowDuration;
+    public int goldPerKill;
+    public PlayerStats stats;
+
+    [HideInInspector]
+    public float goldMultiplier = 1f;
+    [HideInInspector]
+    public float damageMultiplier = 1f;
 
     bool isSlowed;
     bool sustainedDamage;
@@ -19,6 +26,7 @@ public class DamageController : MonoBehaviour {
     {
         self = gameObject;
         movementScript = GetComponent<Nav>();
+        stats = GameObject.Find("PlayerStats").GetComponent<PlayerStats>();
     }
 
     void Update()
@@ -52,10 +60,15 @@ public class DamageController : MonoBehaviour {
     	
     public void DoDamage(int damage)
     {
-        health -= damage;
+        health -= damage*damageMultiplier;
         if (health <= 0)
         {
+            stats.Gold += Mathf.RoundToInt(goldPerKill*(float)goldMultiplier);
             Destroy(self);
+        }
+        else
+        {
+            goldMultiplier = 1;
         }
     }
 

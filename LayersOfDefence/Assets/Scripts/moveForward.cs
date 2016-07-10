@@ -54,6 +54,8 @@ public class moveForward : MonoBehaviour {
             splash.GetComponent<DoSplashDamage>().damage = damage;
         }
         if (ts.abilities.DamageOverTime) { dmg.SustainedDamage(1); }
+        if (ts.abilities.MoreGoldPerKill) { dmg.goldMultiplier = 1.5f; }
+        if (ts.abilities.ArmourShred) { dmg.damageMultiplier += 0.1f; }
 
         Destroy(gameObject);
     }
