@@ -7,9 +7,13 @@ public class DamageController : MonoBehaviour {
     public int slowDuration;
 
     bool isSlowed;
+    bool sustainedDamage;
     GameObject self;
     Nav movementScript;
     float slowEnd = 0f;
+    int sustainedDamageAmount;
+    float sustainedDamageDelay = 1f;
+    float sustainedDamageNext;
 
     void Start()
     {
@@ -25,6 +29,14 @@ public class DamageController : MonoBehaviour {
             {
                 isSlowed = false;
                 movementScript.speed *= 2;
+            }
+        }
+        if (sustainedDamage)
+        {
+            if (Time.timeSinceLevelLoad > sustainedDamageNext)
+            {
+                DoDamage(sustainedDamageAmount);
+                sustainedDamageNext = Time.timeSinceLevelLoad + sustainedDamageDelay;
             }
         }
     }
@@ -45,5 +57,12 @@ public class DamageController : MonoBehaviour {
         {
             Destroy(self);
         }
+    }
+
+    public void SustainedDamage(int damage)
+    {
+        sustainedDamageAmount = damage;
+        sustainedDamage = true;
+        sustainedDamageNext = Time.timeSinceLevelLoad + sustainedDamageDelay;
     }
 }

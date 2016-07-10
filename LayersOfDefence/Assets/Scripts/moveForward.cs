@@ -53,6 +53,7 @@ public class moveForward : MonoBehaviour {
             GameObject splash = (GameObject)Instantiate(SplashArea, transform.position, Quaternion.identity);
             splash.GetComponent<DoSplashDamage>().damage = damage;
         }
+        if (ts.abilities.DamageOverTime) { dmg.SustainedDamage(1); }
 
         Destroy(gameObject);
     }
