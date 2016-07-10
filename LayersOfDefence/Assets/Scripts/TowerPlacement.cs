@@ -104,6 +104,9 @@ public class TowerPlacement : MonoBehaviour {
                     return;
                 }
                 GameObject spawnedTower = (GameObject)Instantiate(towerToSpawn, spawnGhost.transform.position, spawnGhost.transform.rotation);
+                spawnedTower.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color = ts.blockColors[0];
+                spawnedTower.transform.GetChild(1).gameObject.GetComponent<Renderer>().material.color = ts.blockColors[1];
+                spawnedTower.transform.GetChild(2).gameObject.GetComponent<Renderer>().material.color = ts.blockColors[2];
                 playerStats.Gold -= ts.GetPrice();
                 spawnedTower.tag = "Tower";
                 spawnedTower.transform.FindChild("Bottom").tag = "Tower";             
