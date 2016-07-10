@@ -32,7 +32,7 @@ public class MapSpawn : MonoBehaviour {
 
     private void CentreCamera()
     {
-        gameCam.transform.position = new Vector3(xSize / 2, gameCam.transform.position.y, ySize / 2);
+        Camera.main.transform.position = new Vector3(fullPath[0].x, fullPath[0].y + 8, fullPath[0].z - 5);
     }
 
     private void InstaintiateRoad()
@@ -49,7 +49,7 @@ public class MapSpawn : MonoBehaviour {
             }
         }
 
-        Camera.main.transform.position = new Vector3(fullPath[0].x, fullPath[0].y + 8, fullPath[0].z - 5);
+        
     }
 
     private List<Vector3> GenerateRoad()
