@@ -58,7 +58,7 @@ public class PlayerStats : MonoBehaviour {
 
     void Start()
     {
-        Gold = 111500;
+        Gold = 300;
         Lives = 30;
         Wave = 1;
         CreepsOnMap = 0;

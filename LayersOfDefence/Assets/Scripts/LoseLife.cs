@@ -15,7 +15,7 @@ public class LoseLife : MonoBehaviour {
     {
         if (other.tag == "Enemy")
         {
-            AudioSource.PlayClipAtPoint(other.gameObject.GetComponent<AudioClip>(), transform.position, 0.5f);
+            AudioSource.PlayClipAtPoint(other.gameObject.GetComponent<DamageController>().onDeath, transform.position, 0.5f);
             Destroy(other.gameObject);
             playerStats.Lives--;
             playerStats.CreepsOnMap--;

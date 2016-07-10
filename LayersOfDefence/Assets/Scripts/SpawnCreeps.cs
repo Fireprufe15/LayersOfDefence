@@ -51,7 +51,7 @@ public class SpawnCreeps : MonoBehaviour {
                 GameObject spawnedCreep = (GameObject)Instantiate(creep, StartingTile, Quaternion.identity);
                 ps.CreepsOnMap++;
                 DamageController dmg = spawnedCreep.GetComponent<DamageController>();
-                dmg.health = 1f * (wave + 1);
+                dmg.health = 10f * (wave + 1);
                 dmg.textObject = indicatorText;
                 Nav n = spawnedCreep.GetComponent<Nav>();
                 n.points = mapSpawn.fullPath;
