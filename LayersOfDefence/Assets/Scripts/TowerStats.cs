@@ -183,18 +183,15 @@ public class TowerStats : MonoBehaviour
         blockColors[2] = builderGO.transform.GetChild(2).gameObject.GetComponent<Renderer>().material.color;
 
         towerIndex++;
+
+        Towers.towers[towerIndex - 1] = (TowerStats)MemberwiseClone();
+        Towers.towers[towerIndex - 1].abilities = new SpecialAbilities(abilities);
+        Towers.towers[towerIndex - 1].blockColors = new Color[3] { new Color(blockColors[0].r, blockColors[0].g, blockColors[0].b), new Color(blockColors[1].r, blockColors[1].g, blockColors[1].b), new Color(blockColors[2].r, blockColors[2].g, blockColors[2].b) };
         if (towerIndex == 5)
         {
-            Towers.towers[towerIndex - 1] = (TowerStats)MemberwiseClone();
-            Towers.towers[towerIndex - 1].abilities = new SpecialAbilities(abilities);
             towerIndex = 0;
             // start Level
             SceneManager.LoadScene("Game");
-        }
-        else
-        {
-            Towers.towers[towerIndex - 1] = (TowerStats)MemberwiseClone();
-            Towers.towers[towerIndex - 1].abilities = new SpecialAbilities(abilities);
         }
     }
     
