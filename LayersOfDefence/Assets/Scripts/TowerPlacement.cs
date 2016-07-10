@@ -72,9 +72,7 @@ public class TowerPlacement : MonoBehaviour {
             if (spawnedTowers.Where(p => p.transform.position == spawnGhost.transform.position).Count() > 0)
             {
                 canPlace = false;
-            }
-            
-            
+            }                        
         }
         if (onOtherTower == true)
         {
@@ -99,6 +97,10 @@ public class TowerPlacement : MonoBehaviour {
         {
             if (canPlace)
             {
+                if (playerStats.Gold - ts.GetPrice() < 0)
+                {
+                    return;
+                }
                 GameObject spawnedTower = (GameObject)Instantiate(towerToSpawn, spawnGhost.transform.position, spawnGhost.transform.rotation);
                 playerStats.Gold -= ts.GetPrice();
                 spawnedTower.tag = "Tower";

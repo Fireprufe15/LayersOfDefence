@@ -3,6 +3,7 @@ using System.Collections;
 
 public class moveForward : MonoBehaviour {
 
+    public GameObject SplashArea;
     [HideInInspector]
     public float speed;
     [HideInInspector]
@@ -40,13 +41,18 @@ public class moveForward : MonoBehaviour {
         {
             return;
         }
-
+        
 
         DamageController dmg = other.gameObject.GetComponent<DamageController>();
         dmg.DoDamage(damage);
 
 
         if (ts.abilities.SlowEnemies) dmg.Slow();
+        if (ts.abilities.SplashDamage)
+        {
+            GameObject splash = (GameObject)Instantiate(SplashArea, transform.position, Quaternion.identity);
+            splash.GetComponent<DoSplashDamage>().damage = damage;
+        }
 
         Destroy(gameObject);
     }
