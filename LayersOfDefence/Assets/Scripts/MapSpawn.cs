@@ -8,6 +8,8 @@ public class MapSpawn : MonoBehaviour {
 
     [HideInInspector]
     public List<Vector3> fullPath;
+    public GameObject Cave;
+    public GameObject Castle;
 
     public int seed;
     public bool randomSeed;
@@ -49,7 +51,11 @@ public class MapSpawn : MonoBehaviour {
             }
         }
 
-        
+        Vector3 cavPos = new Vector3(fullPath[0].x - 4f, fullPath[0].y, fullPath[0].z + 0.25f);
+        Instantiate(Cave, cavPos, Quaternion.Euler(0, 90, 0));
+
+        Vector3 castle = new Vector3(fullPath[fullPath.Count - 1].x + 4f, fullPath[fullPath.Count - 1].y, fullPath[fullPath.Count - 1].z);
+        Instantiate(Castle, castle, Quaternion.Euler(0, 180, 0));
     }
 
     private List<Vector3> GenerateRoad()
