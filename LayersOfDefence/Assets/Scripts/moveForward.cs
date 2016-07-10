@@ -6,9 +6,11 @@ public class moveForward : MonoBehaviour {
     [HideInInspector]
     public float speed;
     [HideInInspector]
-    public Vector3 target;
+    public GameObject target;
     [HideInInspector]
     public int damage;
+    [HideInInspector]
+    public TowerStats ts;
 
     GameObject self;
     float spawnTime;
@@ -19,13 +21,18 @@ public class moveForward : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        self.transform.position = Vector3.MoveTowards(self.transform.position, target, speed*Time.deltaTime);
-        if (Time.time > spawnTime+0.3f)
+	void FixedUpdate ()
+    {
+        if (!target)
         {
             Destroy(gameObject);
         }
-	}
+        else
+        {
+            transform.LookAt(target.transform.position);
+            GetComponent<Rigidbody>().velocity = transform.forward * speed * Time.deltaTime;
+        }
+    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -33,8 +40,14 @@ public class moveForward : MonoBehaviour {
         {
             return;
         }
+
+
         DamageController dmg = other.gameObject.GetComponent<DamageController>();
         dmg.DoDamage(damage);
+
+
+        if (ts.abilities.SlowEnemies) dmg.Slow();
+
         Destroy(gameObject);
     }
 }

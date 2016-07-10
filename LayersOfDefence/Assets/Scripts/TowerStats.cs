@@ -7,6 +7,22 @@ using System.Collections.Generic;
 
 public class SpecialAbilities
 {
+    public SpecialAbilities(SpecialAbilities s)
+    {
+        count = s.Count;
+        slowEnemies = s.SlowEnemies;
+        splashDamage = s.SplashDamage;
+        moreGoldPerKill = s.MoreGoldPerKill;
+        moreGoldPerWave = s.MoreGoldPerWave;
+        armourShred = s.ArmourShred;
+        damageOverTime = s.DamageOverTime;
+    }
+
+    public SpecialAbilities()
+    {
+
+    }
+
     private int count;
 
     public int Count
@@ -162,6 +178,7 @@ public class TowerStats : MonoBehaviour
         if (towerIndex == 5)
         {
             Towers.towers[towerIndex - 1] = (TowerStats)MemberwiseClone();
+            Towers.towers[towerIndex - 1].abilities = new SpecialAbilities(abilities);
             towerIndex = 0;
             // start Level
             SceneManager.LoadScene("Game");
@@ -169,6 +186,7 @@ public class TowerStats : MonoBehaviour
         else
         {
             Towers.towers[towerIndex - 1] = (TowerStats)MemberwiseClone();
+            Towers.towers[towerIndex - 1].abilities = new SpecialAbilities(abilities);
         }
     }
     

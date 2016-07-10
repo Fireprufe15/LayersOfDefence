@@ -14,6 +14,7 @@ public class TowerPlacement : MonoBehaviour {
     LayerMask mask;
     Vector3 placePosition;
     public GameObject towerToSpawn;
+    public TowerStats ts;
     GameObject spawnGhost;
 
     private bool canPlace;
@@ -100,6 +101,13 @@ public class TowerPlacement : MonoBehaviour {
                 spawnedTower.tag = "Tower";
                 spawnedTower.transform.FindChild("Bottom").tag = "Tower";             
                 spawnedTowers.Add(spawnedTower);
+
+                TowerAttack topStats = spawnedTower.transform.GetChild(2).gameObject.GetComponent<TowerAttack>();
+
+                topStats.Damage = ts.damage;
+                topStats.Range = ts.range;
+                topStats.AttackSpeed = ts.attackSpeed;
+                topStats.ts = ts;
             }
         }
 	}    

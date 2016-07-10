@@ -11,6 +11,8 @@ public class TowerAttack : MonoBehaviour
     public int AttackSpeed;
     public GameObject Bullet;
     public float spawnDistance = 1.2f;
+    [HideInInspector]
+    public TowerStats ts;
 
     private GameObject self;
     private SphereCollider attackCollider;
@@ -37,10 +39,11 @@ public class TowerAttack : MonoBehaviour
         if (lockedEnemy != null)
         {
             RotateToEnemy();
-            if (Time.time >= nextFire)
+            if (Time.timeSinceLevelLoad >= nextFire)
             {
                 Shoot();
-                nextFire = Time.time + 1 - AttackSpeed * 0.01f * 3;
+                float addedTime = 1f / (AttackSpeed / 2f);
+                nextFire = Time.timeSinceLevelLoad + addedTime;
             }
         }
         else
@@ -50,17 +53,14 @@ public class TowerAttack : MonoBehaviour
                 lockedEnemy = lockQueue.Dequeue();
             }
         }
-
-
+        
         transform.rotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, 0);
     }
 
     void OnTriggerEnter(Collider other)
     {
-        
         if (gameObject.transform.parent.gameObject.tag == "Ghost")
         {
-            
             return;
         }
 
@@ -71,24 +71,18 @@ public class TowerAttack : MonoBehaviour
         if (lockedEnemy == null)
         {
             lockedEnemy = other.gameObject;
-            nextFire = Time.time + 1 / AttackSpeed;
         }
         else
         {
             lockQueue.Enqueue(other.gameObject);
         }
-    
-        
-
     }
 
     void OnTriggerExit(Collider other)
     {        
 
         if (gameObject.transform.parent.gameObject.tag == "Ghost")
-        {            
-            
-
+        {      
             return;
         }
         if (other.gameObject == lockedEnemy)
@@ -106,9 +100,6 @@ public class TowerAttack : MonoBehaviour
         {
             lockQueue = new Queue<GameObject>(lockQueue.Where(p => p != other.gameObject));
         }
-
-        
-
     }
 
     void RotateToEnemy()
@@ -121,13 +112,13 @@ public class TowerAttack : MonoBehaviour
     {
         //know where to shoot
         //spawn projectile/raycast/whatever and make it go to enenmy
-        Debug.Log("Shooty shooty");
         self.transform.LookAt(lockedEnemy.transform);
         GameObject bullet = (GameObject)Instantiate(Bullet, self.transform.position + spawnDistance * self.transform.forward, self.transform.rotation);
         bullet.transform.Rotate(0, 0, 90f);
         moveForward mover = bullet.GetComponent<moveForward>();
         mover.damage = Damage;
-        mover.speed = 20f;
-        mover.target = lockedEnemy.transform.position;
+        mover.speed = 250f;
+        mover.target = lockedEnemy;
+        mover.ts = ts;
     }    
 }

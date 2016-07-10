@@ -34,5 +34,6 @@ public class FillButtons : MonoBehaviour {
         ts.UpdateMesh(Top, Middle, Bottom);
         tpScript.towerToSpawn = BaseTower;
         tpScript.enabled = true;
+        tpScript.ts = ts;
     }
 }
