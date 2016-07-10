@@ -157,10 +157,6 @@ public class TowerStats : MonoBehaviour
         builderGO = GameObject.Find("BuilderTower");
 
         blockColors = new Color[3];
-
-        blockColors[0] = builderGO.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color;
-        blockColors[1] = builderGO.transform.GetChild(1).gameObject.GetComponent<Renderer>().material.color;
-        blockColors[2] = builderGO.transform.GetChild(2).gameObject.GetComponent<Renderer>().material.color;
     }
 
     public int GetPrice()
@@ -181,6 +177,10 @@ public class TowerStats : MonoBehaviour
         Top = builderGO.transform.GetChild(0).gameObject.GetComponent<MeshFilter>().mesh;
         Middle = builderGO.transform.GetChild(1).gameObject.GetComponent<MeshFilter>().mesh;
         Bottom = builderGO.transform.GetChild(2).gameObject.GetComponent<MeshFilter>().mesh;
+        
+        blockColors[0] = builderGO.transform.GetChild(0).gameObject.GetComponent<Renderer>().material.color;
+        blockColors[1] = builderGO.transform.GetChild(1).gameObject.GetComponent<Renderer>().material.color;
+        blockColors[2] = builderGO.transform.GetChild(2).gameObject.GetComponent<Renderer>().material.color;
 
         towerIndex++;
         if (towerIndex == 5)
