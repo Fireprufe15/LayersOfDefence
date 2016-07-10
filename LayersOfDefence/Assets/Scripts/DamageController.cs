@@ -6,6 +6,7 @@ public class DamageController : MonoBehaviour {
     public float health;
     public int slowDuration;
     public int goldPerKill;
+    public AudioClip onDeath;
     public PlayerStats stats;
 
     [HideInInspector]
@@ -30,7 +31,7 @@ public class DamageController : MonoBehaviour {
         self = gameObject;
         movementScript = GetComponent<Nav>();
         stats = GameObject.Find("PlayerStats").GetComponent<PlayerStats>();
-        text = textObject.GetComponent<TextMesh>();        
+        text = textObject.GetComponent<TextMesh>();                
     }
 
     void Update()
@@ -76,6 +77,7 @@ public class DamageController : MonoBehaviour {
             text.color = Color.yellow;            
             GameObject goldText = (GameObject)Instantiate(textObject, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 2.1f, gameObject.transform.position.z), Quaternion.identity);
             goldText.GetComponent<MoveUpAndDie>().AttachedCreep = gameObject;
+            AudioSource.PlayClipAtPoint(onDeath, gameObject.transform.position, 0.2f);
             Destroy(self);
             stats.CreepsOnMap--;
         }
