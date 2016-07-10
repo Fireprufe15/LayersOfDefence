@@ -14,7 +14,9 @@ public class TowerPlacement : MonoBehaviour {
     LayerMask mask;
     Vector3 placePosition;
     public GameObject towerToSpawn;
+    [HideInInspector]
     public TowerStats ts;
+    public PlayerStats playerStats;
     GameObject spawnGhost;
 
     private bool canPlace;
@@ -98,6 +100,7 @@ public class TowerPlacement : MonoBehaviour {
             if (canPlace)
             {
                 GameObject spawnedTower = (GameObject)Instantiate(towerToSpawn, spawnGhost.transform.position, spawnGhost.transform.rotation);
+                playerStats.Gold -= ts.GetPrice();
                 spawnedTower.tag = "Tower";
                 spawnedTower.transform.FindChild("Bottom").tag = "Tower";             
                 spawnedTowers.Add(spawnedTower);
