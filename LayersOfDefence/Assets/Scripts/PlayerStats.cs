@@ -5,6 +5,7 @@ using System.Collections;
 public class PlayerStats : MonoBehaviour {
 
     public Text[] playerStatsTexts;
+    public GameObject gameOverScreen;
 
     #region Props
     private int gold;
@@ -29,7 +30,16 @@ public class PlayerStats : MonoBehaviour {
     public int Lives
     {
         get { return lives; }
-        set { lives = value; playerStatsTexts[3].text = value.ToString(); }
+        set
+        {
+            lives = value;
+            playerStatsTexts[3].text = value.ToString();
+            if (lives <= 0)
+            {
+                playerStatsTexts[3].text = 0.ToString();
+                GameOver();
+            }
+        }
     }
 
 
@@ -41,9 +51,14 @@ public class PlayerStats : MonoBehaviour {
 
     #endregion
 
+    void GameOver()
+    {
+        gameOverScreen.SetActive(true);
+    }
+
     void Start()
     {
-        Gold = 500;
+        Gold = 111500;
         Lives = 30;
         Wave = 1;
         CreepsOnMap = 0;

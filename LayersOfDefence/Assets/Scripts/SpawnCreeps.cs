@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System;
 
@@ -10,6 +11,9 @@ public class SpawnCreeps : MonoBehaviour {
     public GameObject creep;
     public MapSpawn mapSpawn;
     public GameObject indicatorText;
+    public float initialWait;
+    public Text waveText;
+    public PlayerStats ps;
 
     [HideInInspector]
     public int wave;
@@ -25,8 +29,14 @@ public class SpawnCreeps : MonoBehaviour {
 
 	void Update ()
     {
+        if (Time.timeSinceLevelLoad < initialWait)
+        {
+            waveText.text = "Next Wave In: " + Mathf.Round((initialWait - Time.timeSinceLevelLoad + 1)).ToString();
+            return;
+        }
+
         SpawnWave();
-	}
+    }
 
     private void SpawnWave()
     {
@@ -34,9 +44,12 @@ public class SpawnCreeps : MonoBehaviour {
         {
             if (Time.timeSinceLevelLoad >= nextCreepSpawn)
             {
+                waveText.enabled = false;
                 // Spawn creep
                 GameObject spawnedCreep = (GameObject)Instantiate(creep, StartingTile, Quaternion.identity);
+                ps.CreepsOnMap++;
                 DamageController dmg = spawnedCreep.GetComponent<DamageController>();
+                dmg.health = 10f * wave + 1;
                 dmg.health = 20f;
                 dmg.textObject = indicatorText;
                 Nav n = spawnedCreep.GetComponent<Nav>();
@@ -51,8 +64,14 @@ public class SpawnCreeps : MonoBehaviour {
                     creepCount = 0;
                     nextWaveSpawn = Time.timeSinceLevelLoad + timeBetweenWaves;
                     wave++;
+                    ps.Wave = wave;
                 }
             }
+        }
+        else
+        {
+            waveText.enabled = true;
+            waveText.text = "Next Wave In: " + Mathf.Round(nextWaveSpawn - Time.timeSinceLevelLoad + 1).ToString();
         }
     }
 }

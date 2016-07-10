@@ -77,6 +77,7 @@ public class DamageController : MonoBehaviour {
             GameObject goldText = (GameObject)Instantiate(textObject, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 2.1f, gameObject.transform.position.z), Quaternion.identity);
             goldText.GetComponent<MoveUpAndDie>().AttachedCreep = gameObject;
             Destroy(self);
+            stats.CreepsOnMap--;
         }
         else
         {
