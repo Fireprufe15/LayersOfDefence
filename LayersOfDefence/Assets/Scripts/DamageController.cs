@@ -65,6 +65,7 @@ public class DamageController : MonoBehaviour {
         {
             stats.Gold += Mathf.RoundToInt(goldPerKill*(float)goldMultiplier);
             Destroy(self);
+            stats.CreepsOnMap--;
         }
         else
         {

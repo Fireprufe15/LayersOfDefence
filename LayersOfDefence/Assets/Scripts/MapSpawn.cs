@@ -41,7 +41,14 @@ public class MapSpawn : MonoBehaviour {
         {
             GameObject currentTile = (GameObject)Instantiate(roadTile, point, Quaternion.Euler(90,0,0));
             currentTile.transform.parent = tilesParent.transform;
+
+            if (fullPath[fullPath.Count - 1] == point)
+            {
+                currentTile.GetComponent<LoseLife>().enabled = true;
+                currentTile.GetComponent<BoxCollider>().enabled = true;
+            }
         }
+
     }
 
     private List<Vector3> GenerateRoad()
