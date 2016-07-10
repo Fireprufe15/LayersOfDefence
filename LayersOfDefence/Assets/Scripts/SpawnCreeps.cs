@@ -9,6 +9,7 @@ public class SpawnCreeps : MonoBehaviour {
     public float timeBetweenWaves;
     public GameObject creep;
     public MapSpawn mapSpawn;
+    public GameObject indicatorText;
 
     [HideInInspector]
     public int wave;
@@ -37,6 +38,7 @@ public class SpawnCreeps : MonoBehaviour {
                 GameObject spawnedCreep = (GameObject)Instantiate(creep, StartingTile, Quaternion.identity);
                 DamageController dmg = spawnedCreep.GetComponent<DamageController>();
                 dmg.health = 20f;
+                dmg.textObject = indicatorText;
                 Nav n = spawnedCreep.GetComponent<Nav>();
                 n.points = mapSpawn.fullPath;
                 n.isNavigating = true;

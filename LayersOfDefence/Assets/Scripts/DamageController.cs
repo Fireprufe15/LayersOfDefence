@@ -12,6 +12,9 @@ public class DamageController : MonoBehaviour {
     public float goldMultiplier = 1f;
     [HideInInspector]
     public float damageMultiplier = 1f;
+    [HideInInspector]
+    public GameObject textObject;
+    private TextMesh text;
 
     bool isSlowed;
     bool sustainedDamage;
@@ -27,6 +30,7 @@ public class DamageController : MonoBehaviour {
         self = gameObject;
         movementScript = GetComponent<Nav>();
         stats = GameObject.Find("PlayerStats").GetComponent<PlayerStats>();
+        text = textObject.GetComponent<TextMesh>();        
     }
 
     void Update()
@@ -61,9 +65,17 @@ public class DamageController : MonoBehaviour {
     public void DoDamage(int damage)
     {
         health -= damage*damageMultiplier;
+        text.text = (damage * damageMultiplier).ToString();
+        text.color = Color.red;
+        GameObject spawnedText = (GameObject)Instantiate(textObject, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y+1.1f, gameObject.transform.position.z), Quaternion.identity);
+        spawnedText.GetComponent<MoveUpAndDie>().AttachedCreep = gameObject;
         if (health <= 0)
         {
             stats.Gold += Mathf.RoundToInt(goldPerKill*(float)goldMultiplier);
+            text.text = (Mathf.RoundToInt(goldPerKill * (float)goldMultiplier)).ToString();
+            text.color = Color.yellow;            
+            GameObject goldText = (GameObject)Instantiate(textObject, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 2.1f, gameObject.transform.position.z), Quaternion.identity);
+            goldText.GetComponent<MoveUpAndDie>().AttachedCreep = gameObject;
             Destroy(self);
         }
         else
