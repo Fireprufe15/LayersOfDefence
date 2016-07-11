@@ -3,11 +3,13 @@ using System.Collections;
 
 public class DamageController : MonoBehaviour {
 
-    public float health;
+    [HideInInspector] public float currentHP;
+    public float startingHP;
     public int slowDuration;
     public int goldPerKill;
     public AudioClip onDeath;
     public PlayerStats stats;
+    public GameObject Explosion;
 
     [HideInInspector]
     public float goldMultiplier = 1f;
@@ -62,24 +64,31 @@ public class DamageController : MonoBehaviour {
         slowEnd = Time.timeSinceLevelLoad + slowDuration;
         isSlowed = true;
     }
-    	
+
+    bool isDead = false;	
+
     public void DoDamage(int damage)
     {
-        health -= damage*damageMultiplier;
+        currentHP -= damage * damageMultiplier;
         text.text = (damage * damageMultiplier).ToString();
         text.color = Color.red;
-        GameObject spawnedText = (GameObject)Instantiate(textObject, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y+1.1f, gameObject.transform.position.z), Quaternion.identity);
+        GameObject spawnedText = (GameObject)Instantiate(textObject, new Vector3(transform.position.x, transform.position.y+1.1f, transform.position.z), Quaternion.identity);
         spawnedText.GetComponent<MoveUpAndDie>().AttachedCreep = gameObject;
-        if (health <= 0)
+        if (currentHP <= 0)
         {
-            stats.Gold += Mathf.RoundToInt(goldPerKill*(float)goldMultiplier);
-            text.text = (Mathf.RoundToInt(goldPerKill * (float)goldMultiplier)).ToString();
+            stats.Gold += Mathf.RoundToInt(goldPerKill * goldMultiplier);
+            text.text = (Mathf.RoundToInt(goldPerKill * goldMultiplier)).ToString();
             text.color = Color.yellow;            
-            GameObject goldText = (GameObject)Instantiate(textObject, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 2.1f, gameObject.transform.position.z), Quaternion.identity);
+            GameObject goldText = (GameObject)Instantiate(textObject, new Vector3(transform.position.x, transform.position.y + 2.1f, transform.position.z), Quaternion.identity);
             goldText.GetComponent<MoveUpAndDie>().AttachedCreep = gameObject;
-            AudioSource.PlayClipAtPoint(onDeath, gameObject.transform.position, 0.2f);
-            Destroy(self);
-            stats.CreepsOnMap--;
+            AudioSource.PlayClipAtPoint(onDeath, transform.position, 0.2f);
+            if (!isDead)
+            {
+                Instantiate(Explosion, transform.position, Quaternion.identity);
+                stats.CreepsOnMap--;
+                isDead = true;
+                Destroy(gameObject);
+            }
         }
         else
         {

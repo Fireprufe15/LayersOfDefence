@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +26,9 @@ public class TowerPlacement : MonoBehaviour {
     public bool onOtherTower;
     public SpawnCreeps spawnCreeps;
 
-	// Use this for initialization
-	void Start () {
-        mask = LayerMask.GetMask("Floor");    
+    // Use this for initialization
+    void Start () {
+        mask = LayerMask.GetMask("Floor");
     }
 
     void OnEnable()
@@ -50,7 +51,8 @@ public class TowerPlacement : MonoBehaviour {
             return;
         }
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);        
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);    
+         
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, rayLength, mask))
         {
@@ -95,8 +97,20 @@ public class TowerPlacement : MonoBehaviour {
             }
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonUp(0))
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                if (spawnGhost)
+                {
+                    spawnGhost.transform.GetChild(0).GetComponent<MeshFilter>().mesh = towerToSpawn.transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh;
+                    spawnGhost.transform.GetChild(1).GetComponent<MeshFilter>().mesh = towerToSpawn.transform.GetChild(1).GetComponent<MeshFilter>().sharedMesh;
+                    spawnGhost.transform.GetChild(2).GetComponent<MeshFilter>().mesh = towerToSpawn.transform.GetChild(2).GetComponent<MeshFilter>().sharedMesh;
+                }
+
+                return;
+            }
+
             if (canPlace)
             {
                 if (playerStats.Gold - ts.GetPrice() < 0)

@@ -13,22 +13,20 @@ public class TowerAttack : MonoBehaviour
     public float spawnDistance = 1.2f;
     [HideInInspector]
     public TowerStats ts;
-
-    private GameObject self;
+    
     private SphereCollider attackCollider;
     private GameObject lockedEnemy;
     private Queue<GameObject> lockQueue;
     private float nextFire;
     private bool towerIsShooting;
     public GameObject towerPlacer;
-
-
+    AudioSource shootSound;
 
     // Use this for initialization
     void Start()
     {
-        self = this.gameObject;
-        attackCollider = self.gameObject.GetComponent<SphereCollider>();
+        shootSound = transform.parent.GetComponent<AudioSource>();
+        attackCollider = gameObject.GetComponent<SphereCollider>();
         attackCollider.radius += Range * 0.01f;
         lockQueue = new Queue<GameObject>();        
     }
@@ -105,15 +103,17 @@ public class TowerAttack : MonoBehaviour
     void RotateToEnemy()
     {
         //rotate tower turret towards enemy if neccesary
-        self.transform.LookAt(lockedEnemy.transform);
+        transform.LookAt(lockedEnemy.transform);
     }
 
     void Shoot()
     {
         //know where to shoot
         //spawn projectile/raycast/whatever and make it go to enenmy
-        self.transform.LookAt(lockedEnemy.transform);
-        GameObject bullet = (GameObject)Instantiate(Bullet, self.transform.position + spawnDistance * self.transform.forward, self.transform.rotation);
+        transform.LookAt(lockedEnemy.transform);
+        GameObject bullet = (GameObject)Instantiate(Bullet, transform.position + spawnDistance * transform.forward, transform.rotation);
+        if (shootSound.isPlaying) shootSound.Stop();
+            shootSound.Play();
         bullet.transform.Rotate(0, 0, 90f);
         moveForward mover = bullet.GetComponent<moveForward>();
         mover.damage = Damage;

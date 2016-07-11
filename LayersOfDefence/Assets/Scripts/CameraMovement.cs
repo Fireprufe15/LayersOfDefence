@@ -8,6 +8,10 @@ public class CameraMovement : MonoBehaviour {
     public float panSpeed;
     [Range(1, 100)]
     public float scrollSpeed;
+    [Header("Mouse Zoom")]
+    public float zoomSpeed;
+    public float minZoom;
+    public float maxZoom;
 
     GameObject cam;
 
@@ -26,21 +30,22 @@ public class CameraMovement : MonoBehaviour {
         PanVertical(isTop, isBottom);
         PanHorizontal(isLeft, isRight);
 
-        float d = Input.GetAxis("Mouse ScrollWheel");
-        Zoom(d);
+        Zoom();
 	}
 
-    private void Zoom(float d)
+    void Zoom()
     {
-        if (d < 0f)
+        float yZoom = transform.position.y + Input.mouseScrollDelta.y * -zoomSpeed;
+        float zZoom = transform.position.z - Input.mouseScrollDelta.y * -zoomSpeed;
+
+        if (yZoom < maxZoom && yZoom > minZoom)
         {
-            // scroll up
-            cam.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y + panSpeed * Time.deltaTime, cam.transform.position.z - panSpeed * Time.deltaTime);
-        }
-        else if (d > 0f)
-        {
-            // scroll down
-            cam.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y - panSpeed * Time.deltaTime, cam.transform.position.z + panSpeed * Time.deltaTime);
+            transform.position = new Vector3
+               (
+                   transform.position.x,
+                   yZoom,
+                   zZoom
+               );
         }
     }
 

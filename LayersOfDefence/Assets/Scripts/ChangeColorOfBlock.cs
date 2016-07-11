@@ -14,7 +14,6 @@ public class ChangeColorOfBlock : MonoBehaviour {
 
 	void UpdateBlock () {
         block.GetComponent<Renderer>().material.color = c;
-        changeColor.isPicking = false;
     }
 
     public void ChangeRed(float value)
@@ -36,5 +35,6 @@ public class ChangeColorOfBlock : MonoBehaviour {
     public void close()
     {
         this.gameObject.SetActive(false);
+        changeColor.isPicking = false;
     }
 }

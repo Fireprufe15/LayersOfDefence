@@ -10,6 +10,7 @@ public class Meshes : MonoBehaviour {
     public MeshFilter topPiece;
     public MeshFilter middlePiece;
     public MeshFilter bottomPiece;
+    public Animator anim;
 
     int topIndex = 0, middleIndex = 0, bottomIndex = 0;
 
@@ -33,6 +34,7 @@ public class Meshes : MonoBehaviour {
         }
 
         topPiece.mesh = topMeshes[topIndex];
+        anim.SetTrigger("TowerChanged");
     }
 
     public void ChangeMiddle(int direction)
@@ -55,6 +57,7 @@ public class Meshes : MonoBehaviour {
         }
 
         middlePiece.mesh = middleMeshes[middleIndex];
+        anim.SetTrigger("TowerChanged");
     }
 
     public void ChangeBottom(int direction)
@@ -77,6 +80,7 @@ public class Meshes : MonoBehaviour {
         }
 
         bottomPiece.mesh = bottemMeshes[bottomIndex];
+        anim.SetTrigger("TowerChanged");
     }
 
 

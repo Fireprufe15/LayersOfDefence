@@ -5,6 +5,7 @@ using System.Collections;
 public class FillButtons : MonoBehaviour {
 
     public Text[] ButtonTexts;
+    public Text[] PriceTexts;
     public GameObject BaseTower;
     public TowerPlacement tpScript;
 
@@ -13,6 +14,7 @@ public class FillButtons : MonoBehaviour {
         for (int i = 0; i < 5; i++)
         {
             ButtonTexts[i].text = Towers.towers[i].name;
+            PriceTexts[i].text = Towers.towers[i].GetPrice().ToString();
         }
 	}
 

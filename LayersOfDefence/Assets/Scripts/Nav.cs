@@ -8,12 +8,14 @@ public class Nav : MonoBehaviour {
     public List<Vector3> points;
     [HideInInspector]
     public bool isNavigating;
+    public float Jumpforce = 2f;
 
     Rigidbody playerRB;
     int currentPoint, lastPoint;
     public float speed = 5f;
 
     bool isMoving = false;
+    Collider thisCol;
 
 	// Use this for initialization
 	void Start ()
@@ -22,13 +24,20 @@ public class Nav : MonoBehaviour {
         currentPoint = 0;
         lastPoint = points.Count;
         playerRB = GetComponent<Rigidbody>();
+        thisCol = GetComponent<Collider>();
 	}
-	
-	void FixedUpdate ()
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.tag == "Enemy")
+            Physics.IgnoreCollision(collision.collider, thisCol);
+    }
+
+    void FixedUpdate ()
     {
         if (!isNavigating) return;
 
-        if (new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), Mathf.Round(transform.position.z))  == points[currentPoint])
+        if (new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), Mathf.Round(transform.position.z)) == points[currentPoint])
         {
             if (!(currentPoint + 1 > points.Count - 1))
             {

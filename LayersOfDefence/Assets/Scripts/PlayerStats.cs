@@ -42,7 +42,6 @@ public class PlayerStats : MonoBehaviour {
         }
     }
 
-
     public int Gold
     {
         get { return gold; }
@@ -56,10 +55,12 @@ public class PlayerStats : MonoBehaviour {
         gameOverScreen.SetActive(true);
     }
 
+    public int startingGold, startingLives;
+
     void Start()
     {
-        Gold = 300;
-        Lives = 30;
+        Gold = startingGold;
+        Lives = startingLives;
         Wave = 1;
         CreepsOnMap = 0;
     }

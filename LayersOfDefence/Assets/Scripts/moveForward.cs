@@ -12,6 +12,7 @@ public class moveForward : MonoBehaviour {
     public int damage;
     [HideInInspector]
     public TowerStats ts;
+    public GameObject SplashGO;
 
     GameObject self;
     float spawnTime;
@@ -52,6 +53,7 @@ public class moveForward : MonoBehaviour {
         {
             GameObject splash = (GameObject)Instantiate(SplashArea, transform.position, Quaternion.identity);
             splash.GetComponent<DoSplashDamage>().damage = damage;
+            Instantiate(SplashGO, transform.position, Quaternion.identity);
         }
         if (ts.abilities.DamageOverTime) { dmg.SustainedDamage(1); }
         if (ts.abilities.MoreGoldPerKill) { dmg.goldMultiplier = 1.5f; }

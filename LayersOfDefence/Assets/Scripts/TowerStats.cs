@@ -166,7 +166,7 @@ public class TowerStats : MonoBehaviour
         price += range * attribauteMultiplier * range;
         price += attackSpeed * attribauteMultiplier * attackSpeed;
 
-        price += abilities.Count * abilityMultiplier * abilities.Count;
+        price += abilities.Count * abilityMultiplier * abilities.Count * price / 10;
 
         return price;
     }
