@@ -11,7 +11,9 @@ public class ChangeColor : MonoBehaviour {
 	void Start () {
 	
 	}
-	
+
+    bool isFirst = true;
+
 	// Update is called once per frame
 	void Update ()
     {
@@ -24,6 +26,12 @@ public class ChangeColor : MonoBehaviour {
             }
             else
             {
+                if (isFirst)
+                {
+                    isFirst = false;
+                    return;
+                }
+
                 isPicking = true;
                 ShowColorPicker(index);
             }

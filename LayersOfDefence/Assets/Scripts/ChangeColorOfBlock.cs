@@ -16,6 +16,8 @@ public class ChangeColorOfBlock : MonoBehaviour {
         block.GetComponent<Renderer>().material.color = c;
     }
 
+    bool isFirst = true;
+
     public void ChangeRed(float value)
     {
         c.r = value;

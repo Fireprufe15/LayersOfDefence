@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerStats : MonoBehaviour {
 
     public Text[] playerStatsTexts;
     public GameObject gameOverScreen;
+    public Text GameOverWaveText;
 
     #region Props
     private int gold;
@@ -53,6 +55,7 @@ public class PlayerStats : MonoBehaviour {
     void GameOver()
     {
         gameOverScreen.SetActive(true);
+        GameOverWaveText.text = "You made it to wave: " + wave.ToString();
     }
 
     public int startingGold, startingLives;
@@ -63,6 +66,11 @@ public class PlayerStats : MonoBehaviour {
         Lives = startingLives;
         Wave = 1;
         CreepsOnMap = 0;
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(0);
     }
 
 }
